@@ -1,0 +1,12 @@
+categories:
+- API
+- NLP
+conversations:
+- - carrots 5 kg?
+  - '{"carrots":{"qty":5,"unit":"kgs"}}'
+- - i need carrot 1 kg?
+  - '{"carrot":{"qty":1,"unit":"kgs"}}'
+- - beetroot 5 kg?
+  - '{"beetroot":{"qty":5,"unit":"kgs"}}'
+- - cuccumber?
+  - '{"cuccumber":{"qty":0,"unit":""}}'

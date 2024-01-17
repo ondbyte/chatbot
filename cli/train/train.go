@@ -7,8 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kevwan/chatbot/bot"
-	"github.com/kevwan/chatbot/bot/adapters/storage"
+	"github.com/ondbyte/chatbot/bot"
+	"github.com/ondbyte/chatbot/bot/adapters/storage"
+	"github.com/ondbyte/chatbot/bot/corpus"
 )
 
 var (
@@ -51,7 +52,12 @@ func main() {
 		Trainer:        bot.NewCorpusTrainer(store),
 		StorageAdapter: store,
 	}
-	if err := chatbot.Train(strings.Split(corporaFiles, ",")); err != nil {
+	allCorporaFiles := strings.Split(corporaFiles, ",")
+	loadedCorporaFiles, err := corpus.LoadCorpora(allCorporaFiles)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := chatbot.Train(loadedCorporaFiles); err != nil {
 		log.Fatal(err)
 	}
 }

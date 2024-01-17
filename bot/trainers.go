@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kevwan/chatbot/bot/adapters/storage"
-	"github.com/kevwan/chatbot/bot/corpus"
+	"github.com/ondbyte/chatbot/bot/adapters/storage"
+	"github.com/ondbyte/chatbot/bot/corpus"
 )
 
 type (
 	Trainer interface {
-		Train(interface{}) error
+		Train([]*corpus.Corpus) error
 	}
 
 	ConversationTrainer struct {
@@ -68,24 +68,13 @@ func NewCorpusTrainer(storage storage.StorageAdapter) *CorpusTrainer {
 	}
 }
 
-func (trainer *CorpusTrainer) Train(data interface{}) error {
-	files, ok := data.([]string)
-	if !ok {
-		return errors.New("CorpusTrainer.Train needs argument to be []string")
-	}
-
-	fmt.Println("Loading corpora...")
-
+func (trainer *CorpusTrainer) Train(corpora []*corpus.Corpus) error {
 	convTrainer := NewConversationTrainer(trainer.storage)
-	corpora, err := corpus.LoadCorpora(files)
-	if err != nil {
-		return err
-	}
 
 	fmt.Println("Creating Q/A mappings...")
 
 	for _, convs := range corpora {
-		for _, conv := range convs {
+		for _, conv := range convs.Conversations {
 			if err := convTrainer.Train(conv); err != nil {
 				return err
 			}

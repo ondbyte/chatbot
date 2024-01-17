@@ -5,8 +5,8 @@ import (
 	"math"
 	"sort"
 
-	"github.com/kevwan/chatbot/bot/adapters/storage"
-	"github.com/kevwan/chatbot/bot/nlp"
+	"github.com/ondbyte/chatbot/bot/adapters/storage"
+	"github.com/ondbyte/chatbot/bot/nlp"
 	"github.com/zeromicro/go-zero/core/mr"
 )
 

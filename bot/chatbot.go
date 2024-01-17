@@ -5,10 +5,11 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kevwan/chatbot/bot/adapters/input"
-	"github.com/kevwan/chatbot/bot/adapters/logic"
-	"github.com/kevwan/chatbot/bot/adapters/output"
-	"github.com/kevwan/chatbot/bot/adapters/storage"
+	"github.com/ondbyte/chatbot/bot/adapters/input"
+	"github.com/ondbyte/chatbot/bot/adapters/logic"
+	"github.com/ondbyte/chatbot/bot/adapters/output"
+	"github.com/ondbyte/chatbot/bot/adapters/storage"
+	"github.com/ondbyte/chatbot/bot/corpus"
 )
 
 const mega = 1024 * 1024
@@ -22,7 +23,7 @@ type ChatBot struct {
 	Trainer        Trainer
 }
 
-func (chatbot *ChatBot) Train(data interface{}) error {
+func (chatbot *ChatBot) Train(data []*corpus.Corpus) error {
 	start := time.Now()
 	defer func() {
 		fmt.Printf("Elapsed: %s\n", time.Since(start))

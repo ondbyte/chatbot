@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"path/filepath"
+	"runtime"
 	"sort"
 
 	"github.com/wangbin/jiebago"
@@ -15,16 +17,33 @@ import (
 )
 
 const (
-	chunkSize              = 10000
-	topKeywords            = 5
-	thresholdForKeywords   = 5
-	maxSearchResults       = 100
-	thresholdForStopWords  = 100
-	dictFile               = "../etc/dict.txt"
-	idfFile                = "../etc/idf.txt"
-	stopWordsFile          = "../etc/stop_words.txt"
-	generatedStopWordsFile = "../etc/stopwords.txt"
+	chunkSize             = 10000
+	topKeywords           = 5
+	thresholdForKeywords  = 5
+	maxSearchResults      = 100
+	thresholdForStopWords = 100
 )
+
+var (
+	dictFile               = ""
+	idfFile                = ""
+	stopWordsFile          = ""
+	generatedStopWordsFile = ""
+)
+
+func init() {
+	dictFile = filePath("dict.txt")
+	idfFile = filePath("idf.txt")
+	stopWordsFile = filePath("stop_words.txt")
+	generatedStopWordsFile = filePath("stopwords.txt")
+}
+
+func filePath(fileName string) string {
+	_, path, _, _ := runtime.Caller(0)
+	path = filepath.Dir(path)
+	path = filepath.Join(path, "etc", fileName)
+	return path
+}
 
 type (
 	keyChunk struct {

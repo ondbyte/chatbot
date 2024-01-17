@@ -15,23 +15,21 @@ type Corpus struct {
 	Conversations [][]string `json:"conversations"`
 }
 
-func LoadCorpora(filePaths []string) (map[string][][]string, error) {
-	result := make(map[string][][]string)
+func LoadCorpora(filePaths []string) (result []*Corpus, err error) {
+	result = []*Corpus{}
 
 	for _, file := range filePaths {
 		if corpus, err := readCorpus(file); err != nil {
 			return nil, err
 		} else {
-			for key, value := range corpus {
-				result[key] = append(result[key], value...)
-			}
+			result = append(result, corpus)
 		}
 	}
 
 	return result, nil
 }
 
-func readCorpus(file string) (map[string][][]string, error) {
+func readCorpus(file string) (*Corpus, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		return nil, err
@@ -51,9 +49,8 @@ func readCorpus(file string) (map[string][][]string, error) {
 	return ret, nil
 }
 
-func unmarshal(ext string, content []byte) (map[string][][]string, error) {
+func unmarshal(ext string, content []byte) (*Corpus, error) {
 	var corpus Corpus
-	ret := make(map[string][][]string)
 
 	switch ext {
 	case ".json":
@@ -68,9 +65,5 @@ func unmarshal(ext string, content []byte) (map[string][][]string, error) {
 		return nil, fmt.Errorf("unknown file type: %s", ext)
 	}
 
-	for _, v := range corpus.Categories {
-		ret[v] = corpus.Conversations
-	}
-
-	return ret, nil
+	return &corpus, nil
 }
