@@ -76,14 +76,14 @@ func (storage *separatedMemoryStorage) Remove(sentence string) {
 	}
 }
 
-func (storage *separatedMemoryStorage) Sync() error {
-	f, err := os.Create(storage.filepath)
+func (storage *separatedMemoryStorage) Sync() (err error) {
+	file, err := os.Create(storage.filepath)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer file.Close()
 
-	encoder := gob.NewEncoder(f)
+	encoder := gob.NewEncoder(file)
 
 	storage.declarativeStorage.SetOutput(encoder)
 	if err := storage.declarativeStorage.Sync(); err != nil {

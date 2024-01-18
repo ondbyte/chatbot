@@ -1,6 +1,8 @@
 package bot_test
 
 import (
+	"bytes"
+	"encoding/gob"
 	"testing"
 
 	"github.com/ondbyte/chatbot/bot"
@@ -12,13 +14,12 @@ import (
 )
 
 func TestBot(t *testing.T) {
+	var err error
 	assert := assert.New(t)
 	// training
-	storeFile := t.TempDir() + "/test.gob"
-	store, err := storage.NewSeparatedMemoryStorage(storeFile)
-	if !assert.NoError(err) {
-		return
-	}
+	store := storage.NewMemoryStorage()
+	buf := bytes.NewBuffer([]byte{})
+	store.SetOutput(gob.NewEncoder(buf))
 	// create training files
 	data := `
 categories:
